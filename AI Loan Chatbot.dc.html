@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #ffffff; -webkit-font-smoothing: antialiased; }
+  a { color: #0a0a0a; text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: #6b6b6b; }
+  ::selection { background: #0a0a0a; color: #fff; }
+</style>
+</helmet>
+
+<div style="font-family:'Source Serif 4',Georgia,serif;color:#242424;background:#fff;">
+
+  <div style="max-width:820px;margin:0 auto;padding:40px 24px 0;">
+    <a href="Portfolio.dc.html" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#6b6b6b;text-decoration:none;">← Back to portfolio</a>
+  </div>
+
+  <header style="max-width:820px;margin:0 auto;padding:40px 24px 48px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:20px;">Learnings at ISB · Part 1</div>
+    <h1 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:clamp(30px,4.2vw,42px);line-height:1.18;letter-spacing:-.015em;color:#0a0a0a;margin:0 0 20px;text-wrap:balance;">The AI chatbot that's obsessed with never lying about your loan</h1>
+    <p style="font-size:22px;line-height:1.5;color:#4a4a4a;margin:0 0 24px;text-wrap:pretty;">Four product decisions that changed how I think about building with AI, from a chatbot I built from scratch on Bajaj Finance's personal loan page.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px 20px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8a8a8a;border-top:1px solid #ececec;padding-top:20px;">
+      <span>Ujjwal Goel</span><span>·</span><span style="display:flex;align-items:center;gap:6px;"><img src="assets/logo-isb.png" alt="ISB" style="height:16px;width:auto;" />ISB</span><span>·</span><span>AI product design</span>
+    </div>
+  </header>
+
+  <article style="max-width:720px;margin:0 auto;padding:0 24px 24px;">
+
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">I recently started learning how to build AI products for real, and the first thing I built was a working chatbot for Bajaj Finance's personal loan page — from scratch. I expected the hard part to be the AI: prompts, models, retrieval. It wasn't.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">The hard part was a string of ordinary-looking product decisions that, if I'd gotten them wrong, would have quietly given a real customer a wrong answer about their loan — with no error message telling either of us it was wrong. Here are the four that changed how I think about AI products.</p>
+
+    <div style="margin:8px 0 40px;">
+      <div style="border:1px solid #ececec;border-radius:12px;overflow:hidden;background:#fafafa;">
+        <img src="assets/loan-chatbot-cover.png" alt="A confused person surrounded by Personal Loan, Business Loan, and Property Loan brochures, asking which one is for them" style="width:100%;display:block;" />
+      </div>
+    </div>
+
+    <div style="margin:8px 0 48px;">
+      <div style="border:1px solid #ececec;border-radius:12px;overflow:hidden;">
+        <img src="assets/loan-chatbot-flow.png" alt="Flowchart: customer question flows through find section, pull context, AI writes answer, check answer, deliver answer + log source, with four PM decisions annotated alongside" style="width:100%;display:block;" />
+      </div>
+    </div>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:26px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 8px;">Decision 1 — Where do you split the document the AI reads from?</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 20px;text-wrap:pretty;">The obvious approach is mechanical: chop the loan document every 200 words and feed the AI one chunk at a time. It's easy to implement and it's wrong. A loan document doesn't respect word counts — a single condition ("prepayment charges are waived if the loan is refinanced within 12 months") can straddle a chunk boundary. Split it in half and the AI reads only the first clause. It doesn't know a second half exists. The customer gets a fluent, confident, and dangerously incomplete answer.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">The fix was to stop splitting by length and start splitting by meaning — break the document at the boundaries between conditions and clauses, so that whatever chunk the AI reads, it reads a complete thought, never half of one.</p>
+    <p style="font-size:18px;line-height:1.65;color:#5a5a5a;margin:0 0 26px;padding:16px 20px;background:#fafafa;border-radius:8px;text-wrap:pretty;"><strong style="color:#2c2c2c;">Lesson:</strong> a chunking strategy is a product decision about what "a complete answer" means, not a technical default you inherit from a tutorial.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:26px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 8px;">Decision 2 — How does the AI search versus how does it answer?</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 20px;text-wrap:pretty;">My first instinct was to use the same unit of text for both jobs: search the document for relevant sections, then answer straight from whatever came back. That instinct is wrong in two opposite directions at once. Search on large sections and the AI's sense of what's actually relevant gets diluted — the section "matches" the question, but only one sentence in it actually answers it. Answer from small snippets and the AI loses the surrounding context a real answer needs — the clause that matters best makes sense next to the exception three lines above it.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">So I separated the two problems: search on small, precise pieces to find the right spot, then use that match as a pointer back to the full section it came from, and answer from that. Retrieval finds the needle; generation needs the whole haystack around it.</p>
+    <p style="font-size:18px;line-height:1.65;color:#5a5a5a;margin:0 0 26px;padding:16px 20px;background:#fafafa;border-radius:8px;text-wrap:pretty;"><strong style="color:#2c2c2c;">Lesson:</strong> retrieval and generation are different problems with different units of work — treating them as one step is where accuracy quietly leaks out.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:26px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 8px;">Decision 3 — What do you tell the AI so it doesn't mess up?</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 20px;text-wrap:pretty;">Even after fixing retrieval, the AI found the right section, read the right section, and still smoothed over a critical loan condition in its answer. No error. No flag. Just a quietly wrong, perfectly fluent answer — the worst kind, because nothing about it looks broken.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">The fix wasn't a better model. It was one explicit instruction: never drop a condition or qualifier, even if it makes the answer longer or less clean. Left to its own judgment, a language model will optimize for a fluent-sounding answer; it has no built-in preference for a complete one. That preference has to come from the prompt, on purpose, every time.</p>
+    <p style="font-size:18px;line-height:1.65;color:#5a5a5a;margin:0 0 26px;padding:16px 20px;background:#fafafa;border-radius:8px;text-wrap:pretty;"><strong style="color:#2c2c2c;">Lesson:</strong> AI will optimize for fluency unless you explicitly tell it to optimize for accuracy — those are not the same objective, and it will pick fluency by default.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:26px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 8px;">Decision 4 — How do you check the AI's work at scale?</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 20px;text-wrap:pretty;">Once the chatbot was actually fielding questions, a new problem showed up: you can't manually read every answer it gives. Spot-checking a handful a day doesn't catch the one answer to the one customer that drops the one condition that mattered.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">So I built an automated checker — a second AI trained specifically to evaluate answers against the source document, with periodic human feedback folded back in to keep it honest. It's not a generic "is this a good answer" grader; it's a judge built for this exact failure mode: did the answer include every condition and qualifier the source actually stated?</p>
+    <p style="font-size:18px;line-height:1.65;color:#5a5a5a;margin:0 0 26px;padding:16px 20px;background:#fafafa;border-radius:8px;text-wrap:pretty;"><strong style="color:#2c2c2c;">Lesson:</strong> evaluation at scale is a product design problem — you have to decide what "correct" means for your domain before you can automate checking for it. It's not just a technical add-on after the AI works.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:26px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">What ties these together</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 34px;text-wrap:pretty;">None of these four decisions were about picking a better model or a cleverer prompt trick. They were about deciding, on purpose, what "correct" means for a person asking about their own loan — and then building the chunking, the retrieval, the instructions, and the evaluation to actually enforce that definition. That's the part of building AI products nobody warns you about going in: the model is rarely the bottleneck. Your product judgment is.</p>
+
+  </article>
+
+  <footer style="border-top:1px solid #ececec;margin-top:20px;">
+    <div style="max-width:820px;margin:0 auto;padding:44px 24px 64px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+      <a href="Portfolio.dc.html" style="font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;color:#0a0a0a;">← Back to portfolio</a>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a9a;">Ujjwal Goel</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}"></script>
+</body>
+</html>

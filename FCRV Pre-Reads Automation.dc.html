@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #ffffff; -webkit-font-smoothing: antialiased; }
+  a { color: #0a0a0a; text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: #6b6b6b; }
+  ::selection { background: #0a0a0a; color: #fff; }
+</style>
+</helmet>
+
+<div style="font-family:'Source Serif 4',Georgia,serif;color:#242424;background:#fff;">
+
+  <div style="max-width:820px;margin:0 auto;padding:40px 24px 0;">
+    <a href="Portfolio.dc.html" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#6b6b6b;text-decoration:none;">← Back to portfolio</a>
+  </div>
+
+  <header style="max-width:820px;margin:0 auto;padding:40px 24px 48px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:20px;">Personal Project · Automation</div>
+    <h1 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:clamp(30px,4.2vw,42px);line-height:1.18;letter-spacing:-.015em;color:#0a0a0a;margin:0 0 20px;text-wrap:balance;">I built an AI that does my homework — then emails 60 classmates</h1>
+    <p style="font-size:22px;line-height:1.5;color:#4a4a4a;margin:0 0 24px;text-wrap:pretty;">Building an unattended AI digest for a whole MBA cohort — and learning that for a system with no human in the loop, silence is a safer failure mode than a wrong answer.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px 20px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8a8a8a;border-top:1px solid #ececec;padding-top:20px;">
+      <span>Ujjwal Goel</span><span>·</span><span style="display:flex;align-items:center;gap:6px;"><img src="assets/logo-isb.png" alt="ISB" style="height:16px;width:auto;" />ISB, FCRV course</span><span>·</span><span>Built with Claude</span>
+    </div>
+  </header>
+
+  <div style="position:relative;width:100%;max-width:960px;margin:0 auto 8px;padding:0 24px;">
+    <div style="position:relative;width:100%;aspect-ratio:21/9;background:#fff;border:1px solid #ececec;border-radius:12px;overflow:hidden;">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="fcrv-hero" placeholder="Drop a screenshot of the digest email / HTML output" src="assets/innocent-engineers-comic.png" shape="rect" fit="contain" hint-size="100%,100%"></x-import>
+    </div>
+  </div>
+
+  <article style="max-width:720px;margin:0 auto;padding:56px 24px 24px;">
+
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">Every morning before our FCRV session — the ISB course that covers finance and macro — our professor forwards five to ten articles to the class: news clippings, research notes, the occasional screenshot. No consistent format, no consistent time. Some mornings it's three PDFs at 7am; other mornings it's nine at 11pm the night before. Reading all of it, every day, on top of actual coursework, was not sustainable.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">So I built an agent. It watches a synced folder, notices new PDFs as they land, summarizes each one in a consistent teaching-oriented format, and emails a clean digest to the whole class — every morning, before I've woken up. No one has to remember to run it. That last part is what makes this a genuinely interesting system to build, and the part I want to write about: not "I used Claude to summarize a PDF," but everything that had to be true for an unattended system to be trustworthy enough to email real people every day without me watching it.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">The naive version, and why it breaks immediately</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">The first version I sketched was embarrassingly simple: each morning, look at what's in the folder, summarize everything in it, send the digest. It took about an hour to see why that doesn't survive contact with reality.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 20px;text-wrap:pretty;">If the job reruns daily and just "summarizes what's in the folder," it re-summarizes everything it already covered yesterday, plus whatever's new — duplicate content, growing runtime, and eventually a digest nobody trusts because half of it is repeats. The PDFs don't even arrive directly; they land via a separate pipeline (professor's email → OneDrive sync), which isn't instant — so a naive job can start reading a folder that's only half-synced and miss articles entirely. Some PDFs are clean text; others are scanned images with no extractable text at all, which a plain text-extraction step just returns empty for. And worst of all: if any single step breaks — one unreadable file, one bad response — the naive version has no fallback. It either crashes (no digest, fine) or, worse, keeps going and sends something broken to sixty people who have no way to know it's wrong.</p>
+
+    <!-- Diagram: before/after -->
+    <div style="margin:36px 0 44px;border:1px solid #ececec;border-radius:12px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;">
+        <div style="padding:14px 18px;">Behavior</div>
+        <div style="padding:14px 18px;border-left:1px solid #333;">Naive rerun</div>
+        <div style="padding:14px 18px;border-left:1px solid #333;">This system</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;font-size:14.5px;line-height:1.5;">
+        <div style="padding:16px 18px;border-top:1px solid #ececec;color:#3d3d3d;">Reprocessing</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#8a3b3b;">Re-reads everything, every run</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#2d6a4f;">Diffs against a manifest — only new files</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;color:#3d3d3d;">Sync timing</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#8a3b3b;">Assumes the folder is fully synced</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#2d6a4f;">Waits out a race-condition guard first</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;color:#3d3d3d;">On failure</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#8a3b3b;">Sends whatever it has — broken or partial</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#2d6a4f;">Sends nothing; retries automatically next day</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;color:#3d3d3d;">Missed a day</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#8a3b3b;">Backlog is silently lost</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#2d6a4f;">Any uncovered file, of any age, gets picked up</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;color:#3d3d3d;">Scanned PDFs</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#8a3b3b;">Text extraction returns empty</div>
+        <div style="padding:16px 18px;border-top:1px solid #ececec;border-left:1px solid #ececec;color:#2d6a4f;">Falls back to a vision-based read</div>
+      </div>
+    </div>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">The manifest is the single source of truth</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">Everything downstream depends on one small JSON file — <span style="font-family:'IBM Plex Mono',monospace;font-size:17px;background:#fafafa;padding:2px 6px;border-radius:4px;">_covered.json</span> — that lists every file the agent has already summarized. Each run reads it once, diffs it against what's actually in the folder, and only touches genuinely new files. It never re-opens anything already covered, even "just to double-check." That restraint matters: the moment you let a system re-read something for verification, you've reintroduced the reprocessing problem you built the manifest to avoid.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">Waiting out the sync, on purpose</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">The PDFs arrive through a pipeline I don't control: the professor's email triggers a OneDrive sync, and that sync takes a few minutes, not zero. So the agent has a guard step before it ever looks at the folder: if the professor's email landed in the last fifteen minutes, wait. Enumerating a half-synced folder is worse than enumerating a stale one — a stale folder just means "try again next run," but a half-synced folder looks complete and lets the agent quietly skip articles that hadn't arrived yet.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">Fail silent, fail safe</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">This is the design decision I keep coming back to. If any step breaks — an unreadable PDF, a failed lookup, anything — the agent produces <em>no output</em>, rather than a broken or partial one. It never invents content to fill a gap. The next day's run just retries, because the manifest was never updated for the file that failed, so it's still "new" tomorrow.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">It would have been easy to make the opposite choice — always send <em>something</em>, since a partial digest feels more useful than none. But this system emails an entire class automatically, with nobody checking it before it goes out. A wrong or half-built summary erodes trust in a way that's hard to earn back, and it does so silently, because nobody's proofreading it before it lands in sixty inboxes. A missing digest is an obviously visible, easily forgiven gap. A wrong one looks authoritative. For any system that acts on real people without a human in the loop, I'd treat "silence is the safe default" as a starting assumption, not an edge case to patch in later.</p>
+
+    <!-- Diagram: fail-safe decision -->
+    <div style="margin:36px 0 44px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9a9a9a;margin-bottom:14px;text-align:center;">Two ways a run can end</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div style="border:1px solid #ececec;border-radius:12px;padding:22px;background:#fff;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#2d6a4f;margin-bottom:16px;">Happy path</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">New articles found</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">↓ all reads succeed</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">↓ HTML file written</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">↓ manifest updated</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;">↓ class receives digest</div>
+          </div>
+        </div>
+        <div style="border:1px solid #ececec;border-radius:12px;padding:22px;background:repeating-linear-gradient(135deg,#fff,#fff 10px,#fafafa 10px,#fafafa 11px);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#8a3b3b;margin-bottom:16px;">Fail-safe path</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">Any step fails</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">↓ no file written</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">↓ manifest left untouched</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;border-bottom:1px dashed #ddd;">↓ nothing sent, no trace to clean up</div>
+            <div style="font-size:14px;font-family:'IBM Plex Mono',monospace;padding:10px 0;">↓ next day retries automatically</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">Self-healing catch-up</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">Because the manifest — not the calendar — decides what's new, a missed run (a holiday, a bug, me forgetting to check on it) isn't a lost day. The next run doesn't ask "what came in today?" It asks "what's in this folder that isn't in the manifest yet?" — regardless of how old the file is. A three-day backlog gets absorbed into the next digest exactly the same way one new file would. The system doesn't need a separate backfill mode; catch-up is just the normal path, running on a folder with more in it than usual.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">One format, no matter how messy the input</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">The inputs are wildly inconsistent — a Bloomberg clipping, a screenshot of a WhatsApp forward, a dense research note — but every summary is forced into exactly two blocks. First, a plain-English causal-chain narrative: news → underlying cause → visible effect → market read-through, written with no bullet points and no jargon. Second, a "Key Takeaway" that bridges the article to a specific concept from that week's FCRV session — risk premium, cost of debt, opportunity cost — sometimes weaving in the professor's own commentary pulled from his email. The constraint is deliberate: heterogeneous source material, pushed through the same fixed cognitive scaffold every time, so a reader builds the same mental model on day thirty as on day one.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">The whole pipeline</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 30px;text-wrap:pretty;">Put together, the system looks like this — with the manifest sitting outside the main flow as the thing two different steps read from and write to, never re-derived from scratch:</p>
+
+    <div style="margin:0 0 44px;display:flex;flex-direction:column;align-items:center;gap:0;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #ececec;border-radius:8px;padding:12px 20px;width:100%;max-width:420px;color:#6b6b6b;">Professor's email (5–10 PDFs)</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #ececec;border-radius:8px;padding:12px 20px;width:100%;max-width:420px;color:#6b6b6b;">OneDrive sync <span style="color:#b8b8b8;">(external, out of the agent's control)</span></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #0a0a0a;border-radius:8px;padding:12px 20px;width:100%;max-width:420px;">Race-condition guard — wait if email &lt; 15 min old</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="position:relative;width:100%;max-width:420px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #0a0a0a;border-radius:8px;padding:12px 20px;">Diff folder vs. manifest → new files only</div>
+        <div style="position:absolute;top:50%;left:calc(100% + 14px);transform:translateY(-50%);font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a9a;white-space:nowrap;">⟷ reads _covered.json</div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;text-align:center;border:1px solid #ececec;border-radius:8px;padding:12px 10px;color:#3d3d3d;">Text extraction (most files)</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;text-align:center;border:1px solid #ececec;border-radius:8px;padding:12px 10px;color:#3d3d3d;">Vision fallback (scanned PDFs)</div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #ececec;border-radius:8px;padding:12px 20px;width:100%;max-width:420px;color:#6b6b6b;">Summarize → causal narrative + Key Takeaway</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="position:relative;width:100%;max-width:420px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #0a0a0a;border-radius:8px;padding:12px 20px;">Write prereads_YYYY-MM-DD.html + update manifest</div>
+        <div style="position:absolute;top:50%;left:calc(100% + 14px);transform:translateY(-50%);font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a9a;white-space:nowrap;">⟷ writes _covered.json</div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #ececec;border-radius:8px;padding:12px 20px;width:100%;max-width:420px;color:#6b6b6b;">Power Automate watches for the file</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;padding:6px 0;color:#c4c4c4;">↓</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-align:center;border:1px solid #0a0a0a;border-radius:8px;padding:12px 20px;width:100%;max-width:420px;background:#0a0a0a;color:#fff;">Digest emailed to the class</div>
+    </div>
+    <p style="font-size:15px;line-height:1.6;color:#8a8a8a;font-family:'IBM Plex Mono',monospace;margin:0 0 44px;text-align:center;">The agent never sends email directly — it only has to produce a correctly-named, well-formed file. A separate system watches for it and acts. That decoupling is one of the more reusable ideas here.</p>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">What classmates actually said</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 26px;text-wrap:pretty;">I ran a short anonymous survey after a few weeks of daily digests. Twelve responses came back, with an average helpfulness rating of <strong>4.1 out of 5</strong>.</p>
+
+    <blockquote style="margin:0 0 28px;padding:0 0 0 22px;border-left:2px solid #0a0a0a;font-style:italic;font-size:21px;line-height:1.6;color:#2c2c2c;">"I actually started reading the articles sent by prof more after receiving your emails, thinking have I become so lazy. Thank you for making me more diligent xD"</blockquote>
+    <blockquote style="margin:0 0 28px;padding:0 0 0 22px;border-left:2px solid #0a0a0a;font-style:italic;font-size:21px;line-height:1.6;color:#2c2c2c;">"It was a really great initiative you took. It was genuinely helpful."</blockquote>
+
+    <h2 style="font-family:'Source Serif 4',serif;font-weight:600;font-size:28px;line-height:1.25;letter-spacing:-.01em;color:#0a0a0a;margin:44px 0 20px;">What I'd carry into the next automation</h2>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 20px;text-wrap:pretty;">Three ideas here weren't specific to summarizing PDFs, and I'd reach for them again on any unattended system:</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 14px;text-wrap:pretty;"><strong>A manifest beats a calendar.</strong> "What have I already done?" is a more reliable question than "what should I do today?" — it makes catch-up free and reprocessing impossible, with no separate backfill logic required.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 14px;text-wrap:pretty;"><strong>Silence is a valid, often correct, output.</strong> Any system that acts on real people without a human checking first should default to doing nothing on uncertainty, not to doing its best guess.</p>
+    <p style="font-size:20px;line-height:1.75;margin:0 0 34px;text-wrap:pretty;"><strong>Decouple the action from the artifact.</strong> The agent's only job is to produce a well-formed file with the right name. A separate system decides what to do when that file appears. That seam made the whole thing easier to reason about, and easier to replace either half of later.</p>
+
+  </article>
+
+  <footer style="border-top:1px solid #ececec;margin-top:20px;">
+    <div style="max-width:820px;margin:0 auto;padding:44px 24px 64px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+      <a href="Portfolio.dc.html" style="font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;color:#0a0a0a;">← Back to portfolio</a>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a9a;">Ujjwal Goel</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}"></script>
+</body>
+</html>
