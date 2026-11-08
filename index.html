@@ -88,7 +88,7 @@
     <section id="projects" style="max-width:1080px;margin:0 auto;padding:24px 24px 40px;">
       <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid #ececec;padding-bottom:18px;margin-bottom:56px;">
         <h2 style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#0a0a0a;margin:0;">Selected Projects</h2>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9a9a9a;">04 case studies</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9a9a9a;">05 case studies</span>
       </div>
 
       <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
@@ -292,7 +292,7 @@
 class Component extends DCLogic {
   state = { view: 'home', projectId: 'samadhanseva' };
 
-  skills = ['Product Strategy', '0\u21921 Product', 'Growth', 'Fintech / Lending', 'Payments', 'User Research', 'Experimentation', 'Data / SQL', 'Roadmapping', 'GTM'];
+  skills = ['Product Strategy', '0→1 Product', 'Growth', 'Fintech / Lending', 'Payments', 'User Research', 'Experimentation', 'Data / SQL', 'Roadmapping', 'GTM'];
 
   data = [
     {
@@ -300,21 +300,21 @@ class Component extends DCLogic {
       index: '01',
       companyLogo: 'assets/logo-isb.png', company: 'Civic AI · Public Sector',
       title: 'Can AI tell when the government actually fixed your complaint?',
-      tagline: 'Built at ISB\u2019s AI Build Lab and placed 2nd out of 111 teams, judged by senior CEOs and investors. An AI system that listens to a citizen\u2019s complaint, routes it to the right department, and verifies with photo evidence that it was actually fixed.',
+      tagline: 'Built at ISB’s AI Build Lab and placed 2nd out of 111 teams, judged by senior CEOs and investors. An AI system that listens to a citizen’s complaint, routes it to the right department, and verifies with photo evidence that it was actually fixed.',
       coverId: 'ss-cover', coverLabel: 'Drop Samadhan Seva product hero / app screens',
       heroId: 'ss-hero', heroLabel: 'Drop a hero shot, demo GIF, or team/trophy photo',
-      role: 'Product Manager', timeline: 'ISB AI Build Lab · 2025', team: 'Ujjwal (PM) \u00b7 Aditya & Deblina (Eng) \u00b7 Jinendra (Finance)',
+      role: 'Product Manager', timeline: 'ISB AI Build Lab · 2025', team: 'Ujjwal (PM) · Aditya & Deblina (Eng) · Jinendra (Finance)',
       links: [
-        { label: 'Live demo (Replit) \u2197', href: '#' },
-        { label: 'GitHub repo \u2197', href: '#' },
+        { label: 'Live demo (Replit) ↗', href: '#' },
+        { label: 'GitHub repo ↗', href: '#' },
       ],
       judges: [
-        { name: 'Sudeepta Veerapaneni', title: 'Chief Innovation Officer', org: 'Deloitte South Asia', blurb: 'Leads innovation strategy across Deloitte\u2019s South Asia practice.' },
-        { name: 'Vasisht Ravichandran', title: 'Co-Founder & COO', org: 'POP', blurb: 'Scaling POP\u2019s loyalty-first UPI app into shopping and BNPL for young India.' },
+        { name: 'Sudeepta Veerapaneni', title: 'Chief Innovation Officer', org: 'Deloitte South Asia', blurb: 'Leads innovation strategy across Deloitte’s South Asia practice.' },
+        { name: 'Vasisht Ravichandran', title: 'Co-Founder & COO', org: 'POP', blurb: 'Scaling POP’s loyalty-first UPI app into shopping and BNPL for young India.' },
         { name: 'Vijay SP', title: 'Co-Founder & CEO', org: 'Tarento', blurb: 'Built Tarento into a 700+ person digital-transformation firm since 2009.' },
-        { name: 'Rahul Paith', title: 'Former CEO, T-Hub · CEO, MATH', org: 'T-Hub / MATH', blurb: 'Now leads MATH, T-Hub\u2019s AI/ML centre of excellence backing 150+ startups a year.' },
+        { name: 'Rahul Paith', title: 'Former CEO, T-Hub · CEO, MATH', org: 'T-Hub / MATH', blurb: 'Now leads MATH, T-Hub’s AI/ML centre of excellence backing 150+ startups a year.' },
         { name: 'Devesh Chandra Srivastava, IPS', title: 'Special Commissioner of Police', org: 'Delhi Police', blurb: 'Senior law-enforcement leadership with a direct stake in civic-governance tech.' },
-        { name: 'Adil', title: 'India Growth Head', org: 'Replit', blurb: 'Leads India growth for Replit \u2014 the platform Samadhan Seva is deployed on.' },
+        { name: 'Adil', title: 'India Growth Head', org: 'Replit', blurb: 'Leads India growth for Replit — the platform Samadhan Seva is deployed on.' },
       ],
       videoUrl: 'https://drive.google.com/file/d/1CSvrrFMN-R2J2SwAMb5h638U7zxtkmnB/preview',
       metrics: [
@@ -323,35 +323,88 @@ class Component extends DCLogic {
         { value: 'Live', label: 'Deployed on Replit + GitHub' },
       ],
       sections: [
-        { num: '01', label: 'Problem', heading: 'One photo, three ceilings no system could climb', slotId: 'ss-s1', slotLabel: 'Drop the "one photo, three ceilings" example or problem slide', slotSrc: 'assets/samadhan-seva-pothole.jpg', caption: 'The problem \u2014 replace with your pitch slide', paras: [
-          '23 lakh grievances were filed on CPGRAMS in 2025 \u2014 more than double a decade ago. The government marks over 90% "resolved." But only 1 in 2 citizens confirm it was actually resolved, and just 1 in 3 are satisfied with the fix.',
-          'A single photo can show a fallen tree, a flooded drain, and a snapped wire at once \u2014 and no existing system climbs past three ceilings: a form can\u2019t capture a problem it has no category for, a directory can list departments but never weigh which one matters right now, and a status field can be set to "resolved" without ever being verified.' ] },
+        { num: '01', label: 'Problem', heading: 'One photo, three ceilings no system could climb', slotId: 'ss-s1', slotLabel: 'Drop the "one photo, three ceilings" example or problem slide', slotSrc: 'assets/samadhan-seva-pothole.jpg', caption: 'The problem — replace with your pitch slide', paras: [
+          '23 lakh grievances were filed on CPGRAMS in 2025 — more than double a decade ago. The government marks over 90% "resolved." But only 1 in 2 citizens confirm it was actually resolved, and just 1 in 3 are satisfied with the fix.',
+          'A single photo can show a fallen tree, a flooded drain, and a snapped wire at once — and no existing system climbs past three ceilings: a form can’t capture a problem it has no category for, a directory can list departments but never weigh which one matters right now, and a status field can be set to "resolved" without ever being verified.' ] },
         { num: '02', label: 'Approach', heading: 'Three AI agents that listen, route, and verify', slotId: 'ss-s2', slotLabel: 'Drop product/demo screens of Didi, Guide, Sakshi', caption: 'The citizen journey, step by step', isFlow: true, flow: [
           { agent: 'SAMADHAN DIDI', text: 'Citizen describes the problem by voice, in their own language' },
-          { agent: null, text: 'AI classifies the entry point \u2014 is this a cause, a symptom, or a consequence?' },
+          { agent: null, text: 'AI classifies the entry point — is this a cause, a symptom, or a consequence?' },
           { agent: null, text: 'Walks backward to the root cause a department can actually act on' },
           { agent: null, text: 'Walks forward to sibling problems the same issue may have caused' },
-          { agent: null, text: 'Citizen confirms the chain \u2014 one tap, green or red' },
+          { agent: null, text: 'Citizen confirms the chain — one tap, green or red' },
           { agent: 'SAMADHAN GUIDE', text: 'AI scores severity and routes to the right department + field team' },
           { agent: null, text: 'Officer resolves the issue and uploads a closing photo' },
-          { agent: 'SAMADHAN SAKSHI', text: 'AI compares citizen vs. officer photos \u2014 approve / review / reject' },
-          { agent: null, text: 'Human manager gives the final approval \u2014 no auto-close' },
+          { agent: 'SAMADHAN SAKSHI', text: 'AI compares citizen vs. officer photos — approve / review / reject' },
+          { agent: null, text: 'Human manager gives the final approval — no auto-close' },
         ], paras: [
-          'Samadhan Didi listens to a citizen\u2019s complaint by voice, in their own language. Samadhan Guide routes it by walking the causal chain backward to the root cause a department can actually act on, then forward to sibling problems the same issue may have caused. Samadhan Sakshi verifies the fix by comparing the citizen\u2019s photo against the officer\u2019s closing photo \u2014 semantically, not pixel-by-pixel.',
-          'A human manager stays in the loop for every closure. The AI\u2019s verdict \u2014 approve, review, or reject \u2014 is advisory; there is no auto-close, because a system that closes complaints without a human removes officer accountability, and an unaccountable system can\u2019t be sold to a government.' ] },
-        { num: '03', label: 'Impact', heading: '2nd of 111 teams, judged by the people who\u2019d actually buy it', slotId: 'ss-s3', slotLabel: 'Drop a final pitch slide / trophy photo', caption: 'Product demo walkthrough', videoUrl: 'https://drive.google.com/file/d/1rM2T-rWPhKqnNIJmAIdVxjNNPfZSgMED/preview', paras: [
-          'We placed 2nd out of 111 teams at ISB\u2019s AI Build Lab. The product is fully deployed \u2014 a live Replit build backed by a public GitHub repo, not just slides.',
-          'Every verified resolution also becomes structured data: a photo-confirmed record of what broke, where, and how it was fixed. That\u2019s the seed of a longer-term product \u2014 an AI layer that helps municipalities plan infrastructure budgets from real repair history instead of guesswork, turning years of resolved complaints into an evidence-backed shortlist for engineers to review.' ] },
+          'Samadhan Didi listens to a citizen’s complaint by voice, in their own language. Samadhan Guide routes it by walking the causal chain backward to the root cause a department can actually act on, then forward to sibling problems the same issue may have caused. Samadhan Sakshi verifies the fix by comparing the citizen’s photo against the officer’s closing photo — semantically, not pixel-by-pixel.',
+          'A human manager stays in the loop for every closure. The AI’s verdict — approve, review, or reject — is advisory; there is no auto-close, because a system that closes complaints without a human removes officer accountability, and an unaccountable system can’t be sold to a government.' ] },
+        { num: '03', label: 'Impact', heading: '2nd of 111 teams, judged by the people who’d actually buy it', slotId: 'ss-s3', slotLabel: 'Drop a final pitch slide / trophy photo', caption: 'Product demo walkthrough', videoUrl: 'https://drive.google.com/file/d/1rM2T-rWPhKqnNIJmAIdVxjNNPfZSgMED/preview', paras: [
+          'We placed 2nd out of 111 teams at ISB’s AI Build Lab. The product is fully deployed — a live Replit build backed by a public GitHub repo, not just slides.',
+          'Every verified resolution also becomes structured data: a photo-confirmed record of what broke, where, and how it was fixed. That’s the seed of a longer-term product — an AI layer that helps municipalities plan infrastructure budgets from real repair history instead of guesswork, turning years of resolved complaints into an evidence-backed shortlist for engineers to review.' ] },
+      ],
+    },
+    {
+      id: 'rzpcollections',
+      index: '02',
+      companyLogo: 'assets/logo-razorpay.png', company: 'Fintech AI · Razorpay Build Challenge',
+      title: 'When an EMI bounces, who should call next — an AI or a person?',
+      tagline: 'A collections platform for lenders: a Hindi and Hinglish voice agent calls the borrower within minutes, a review bot audits every call against the lender’s rules, and rules — not the model — decide what happens next. Built in nine days for the Razorpay x ISB Build Challenge.',
+      role: 'Product Manager · Solo build', timeline: 'Razorpay x ISB Build Challenge, Track 2 · Oct 2026', team: 'Ujjwal (PM), building with Claude Code',
+      links: [
+        { label: 'GitHub repo ↗', href: 'https://github.com/mainujjwal26-ship-it/razorpay_buildathon' },
+        { label: 'Agent prompt ↗', href: 'https://github.com/mainujjwal26-ship-it/razorpay_buildathon/blob/main/content/prompts/agent.md' },
+        { label: 'Decision rules ↗', href: 'https://github.com/mainujjwal26-ship-it/razorpay_buildathon/blob/main/content/decision-rules.json' },
+      ],
+      judges: [],
+      videoUrl: 'https://drive.google.com/file/d/13ZuPDebdK6GqwPUT8D9iOj4VUqf3EIxO/preview',
+      metrics: [
+        { value: '~29%', label: 'EMI auto-debits that fail' },
+        { value: '3', label: 'AI layers: call, review, plan' },
+        { value: '9 days', label: 'Idea to working build' },
+        { value: '46%', label: 'Recovered, synthetic sample' },
+      ],
+      sections: [
+        { num: '01', label: 'Problem', heading: 'Recovery is bought in headcount, and the decision that moves money is made by feel', noVisual: true, paras: [
+          'India’s personal loan book stands at ₹17.0 lakh crore across 12.7 crore live loans (CRIF High Mark, Jun 2026). Roughly 29% of NACH auto-debits fail by volume and 22% by value (NPCI; the public series ends in 2022). About 2.3% of the book, around ₹39,000 crore by my own arithmetic, is still unpaid 31 to 180 days later, and 5.7% for small-ticket NBFC loans.',
+          'For the head of collections at a bank or NBFC, one caller covers about 400 borrowers, so chasing more bounces means hiring more people. And the call that matters most, which borrower deserves which kind of effort, is decided on instinct.' ] },
+        { num: '02', label: 'Discovery', heading: 'Three lender interviews: the bot already works, the decision doesn’t', noVisual: true, paras: [
+          'I interviewed a product lead, a collections analyst and a data-science lead at an Indian lender that runs collections in-house. Bounces drop into the CRM and each agent places 900–1,000 calls a day, repeating until a call ends well. About 30% of non-payers have an intent problem and 70% a genuine one (medical, salary delay, family), but there is no fixed rule, it varies by agent and region, and the record is a one-word tag.',
+          'Quality is sampled: a team hears 10–20% of calls, while an AI now scores all of them and matches the agents’ tags about 80% of the time. AI calling has cut cost from ₹11 to ₹3–4 a minute and matched humans in an A/B test. What is still unbuilt is choosing which borrower goes to a person, and using the last call to shape the next.' ] },
+        { num: '03', label: 'Approach', heading: 'Three layers: make the call, review it, plan the next move', caption: 'From a bounced EMI to a plan for the cycle', isFlow: true, flow: [
+          { agent: 'LAYER 1 · THE CALLING BOT', text: 'Calls the borrower within minutes, in Hindi or Hinglish, while the bounce is hours old' },
+          { agent: null, text: 'Confirms who it is speaking to, then asks why the EMI was missed and listens' },
+          { agent: null, text: 'Asks for a date and an amount, sends one payment link, raises a ticket for anything it cannot promise' },
+          { agent: 'LAYER 2 · THE CALL REVIEW BOT', text: 'Reads every call after it ends: reason for the miss, mood, how firm the promise was' },
+          { agent: null, text: 'Checks the call against the lender’s rules, in exact code and by a model that must quote the call' },
+          { agent: 'LAYER 3 · THE ACTION PLAN', text: 'Combines the call with borrower history: who calls next, the AI or a person?' },
+          { agent: null, text: 'Turns every route into a plan for the cycle: how many calls, how much money, by when' },
+        ], paras: [
+          'The calling agent, Meera, follows the lender’s rules: she confirms who she is speaking to first, sends one payment link, and raises a ticket for anything she cannot promise. Hindi and Hinglish speech runs on Sarvam AI, and Claude drives each turn of the conversation.',
+          'After the call, the review bot scores it independently, and the third layer uses the result plus the borrower’s history to decide who should take the borrower next. It does not stop at one borrower: the Plan tab turns every route into resource allocation for the cycle, including how much should land by day 1, 3 and 7 and where the gap to target sits.' ] },
+        { num: '04', label: 'Decisions', heading: 'Rules decide the route. The model only extracts facts.', noVisual: true, paras: [
+          'Two questions decide the route: has intent shifted (four or more bounces in the window), and did the AI let the borrower down on this call? Either answer being yes sends the borrower to a person. The model never makes that call; it only extracts the reason for the miss, the promise and the tone.',
+          'When I specified how calls would be scored, the AI proposed letting the model judge every rule. I rejected it, because a lender cannot audit a verdict it cannot explain. Hard rules (one payment link, no threats, nothing the lender has not approved) are checked in exact code. Judgement rules (did she listen first, did she handle the reason) are scored by the model, and each verdict must quote the call. A flag from either side counts as a breach.',
+          'Two things were left out on purpose: pre-bounce awareness calling, which an IVR call or a reminder already does, and one playbook for every lender. Each bank or NBFC sets up its own agent, so the demo journey is a sample, and the product is the layer beneath any of them: better signals and the next step, not another collections bot.' ] },
+        { num: '05', label: 'Why Razorpay', heading: 'A new signal for Razorpay’s stack, sold to merchants it already serves', noVisual: true, paras: [
+          'Razorpay already sees payment signals across many merchants. Every call adds signals of its own: why the EMI was missed, how firm the promise was, and whether it was kept. With the lender’s consent, that is a base for AI in lending later.',
+          'Financial merchants already use Razorpay’s NACH debit service. That is where a pilot starts and where this product can be cross-sold.' ] },
+        { num: '06', label: 'Results', heading: 'What the sample shows, and what it doesn’t', noVisual: true, paras: [
+          'On a synthetic sample of 100 EMIs, the agent recovered 46% of rupees due (₹2,30,000 of ₹5,00,000), and 40 of 100 EMIs cleared in full with a median of 5 days. The hard-rule breach rate was 29.7%, the gap to close first: partly a strict reviewer, partly the agent being wrong, and I cannot yet separate the two. Routing accuracy is not measured yet and needs live calls.',
+          'Every figure comes from sample data, so they show the measurement works, not that the agent does. The plan is shown, not executed, and the decision weights are reasoned, not yet calibrated against real outcomes. The next test: send half of one month’s bounced EMIs through the agent and half through today’s process, and compare rupees collected over nine days.' ] },
+        { num: '07', label: 'Build', heading: 'Nine days, one person, and AI doing the heavy lifting', noVisual: true, paras: [
+          'The build was 68 commits between 5 and 13 October 2026, 45 by Claude Code, 13 by the Replit agent and 10 by me: about 11,800 lines of TypeScript, 8,400 lines of rules and content, and 37 tests. A Hindi voice agent, a call review step, a decision engine, a six-tab dashboard and a planning tab, built by one person.',
+          'The loop that mattered: real call logs are pushed to GitHub, Claude Code reads what actually happened, I edit a script line or a threshold, and the live app has it the same evening. The AI did the code, the computation and the research. The problem, the collections process, the guardrails and what each screen answers came from my own time in the domain and the three interviews. And every figure here has a source or is labelled my own calculation, because the AI once wrote a statistic that was not in the data.' ] },
       ],
     },
     {
       id: 'fcrv',
-      index: '02',
+      index: '03',
       isExternal: true,
       href: 'FCRV Pre-Reads Automation.dc.html',
       company: 'AI Automation · Built for Myself',
-      title: 'I built an AI that does my homework \u2014 then emails 60 classmates',
-      tagline: 'An unattended AI agent that watches a folder, summarizes whatever lands in it, and emails a daily digest to a 60-person MBA cohort \u2014 built so silence, not a wrong answer, is the failure mode.',
+      title: 'I built an AI that does my homework — then emails 60 classmates',
+      tagline: 'An unattended AI agent that watches a folder, summarizes whatever lands in it, and emails a daily digest to a 60-person MBA cohort — built so silence, not a wrong answer, is the failure mode.',
       coverId: 'fcrv-cover', coverLabel: 'Drop a screenshot of the digest email / HTML output', coverSrc: 'assets/innocent-engineers-comic.png',
       metrics: [
         { value: '4.1 / 5', label: 'Avg. helpfulness rating' },
@@ -361,12 +414,12 @@ class Component extends DCLogic {
     },
     {
       id: 'loanbot',
-      index: '03',
+      index: '04',
       isExternal: true,
       href: 'AI Loan Chatbot.dc.html',
       companyLogo: 'assets/logo-isb.png', company: 'FinTech AI · Applied Learning',
-      title: 'The AI chatbot that\u2019s obsessed with never lying about your loan',
-      tagline: 'The AI wasn\u2019t the hard part. Four product decisions \u2014 chunking, retrieval vs. generation, instructing for accuracy over fluency, and evaluation at scale \u2014 from a chatbot built on Bajaj Finance\u2019s personal loan page.',
+      title: 'The AI chatbot that’s obsessed with never lying about your loan',
+      tagline: 'The AI wasn’t the hard part. Four product decisions — chunking, retrieval vs. generation, instructing for accuracy over fluency, and evaluation at scale — from a chatbot built on Bajaj Finance’s personal loan page.',
       coverId: 'loanbot-cover', coverLabel: 'Drop a screenshot of the chatbot in action', coverSrc: 'assets/loan-chatbot-cover.png',
       metrics: [
         { value: '4', label: 'Key product decisions' },
@@ -376,7 +429,7 @@ class Component extends DCLogic {
     },
     {
       id: 'zomato',
-      index: '04',
+      index: '05',
       isExternal: true,
       href: 'Zomato Moments.dc.html',
       company: 'Growth Product · Social Commerce',
@@ -414,7 +467,8 @@ class Component extends DCLogic {
     const idx = Math.max(0, projects.findIndex((p) => p.id === this.state.projectId));
     const cur = projects[idx] || projects[0];
     const nextP = projects[(idx + 1) % projects.length];
-    const current = { ...cur, links: cur.links || [], judges: cur.judges || [], videoUrl: cur.videoUrl || '', sections: cur.sections.map((s) => ({ ...s, slotSrc: s.slotSrc || '', isImage: !s.isFlow && !s.videoUrl })), next: { title: nextP.title, company: nextP.company, open: nextP.open } };
+    const nextOpen = nextP.isExternal ? () => { window.location.href = nextP.href; } : nextP.open;
+    const current = { ...cur, links: cur.links || [], judges: cur.judges || [], videoUrl: cur.videoUrl || '', sections: cur.sections.map((s) => ({ ...s, slotSrc: s.slotSrc || '', isImage: !s.isFlow && !s.videoUrl && !s.noVisual })), next: { title: nextP.title, company: nextP.company, open: nextOpen } };
     return {
       isHome: this.state.view === 'home',
       isCase: this.state.view === 'case',
