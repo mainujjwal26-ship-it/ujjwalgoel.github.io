@@ -88,7 +88,7 @@
     <section id="projects" style="max-width:1080px;margin:0 auto;padding:24px 24px 40px;">
       <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid #ececec;padding-bottom:18px;margin-bottom:56px;">
         <h2 style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#0a0a0a;margin:0;">Selected Projects</h2>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9a9a9a;">05 case studies</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9a9a9a;">06 case studies</span>
       </div>
 
       <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
@@ -398,8 +398,48 @@ class Component extends DCLogic {
       ],
     },
     {
-      id: 'fcrv',
+      id: 'placementdesk',
       index: '03',
+      noCover: true,
+      companyLogo: 'assets/logo-isb.png', company: 'AI Tooling · Built for Myself',
+      title: 'I built a war-room that scores my PM interview practice like an interviewer would',
+      tagline: 'Placement season gave me eight weeks and nine kinds of case. So I built a private desk where every mock is scored on a fixed rubric, error patterns are tagged, and a planner tells me what to practise next, run with Claude as the interviewer.',
+      role: 'Product Manager · Builder', timeline: 'ISB placement prep · 23 Oct – 15 Dec 2026', team: 'Ujjwal (solo), built with Claude',
+      links: [],
+      judges: [],
+      videoUrl: '',
+      metrics: [
+        { value: '9', label: 'Case types covered' },
+        { value: '5', label: 'Weighted scoring rubrics' },
+        { value: '53 days', label: 'Placement window' },
+      ],
+      sections: [
+        { num: '01', label: 'Problem', heading: 'Practice without a feedback loop is just repetition', noVisual: true, paras: [
+          'PM interviews test nine different case types: strategy, GTM, design, root-cause analysis, metrics, guesstimates, AI, behavioural and decks. Each is judged on different things, and most of my mocks lived in chat windows and notes. After a few weeks I could not say which skill was improving, which mistake kept coming back, or what to practise tomorrow.',
+          'I wanted what a coach would give me: a consistent score, the exact moment in my answer where it went wrong, and an honest trend.' ] },
+        { num: '02', label: 'How it works', heading: 'Every mock becomes a scored, searchable record', caption: 'One practice session, from answer to next action', isFlow: true, flow: [
+          { agent: 'RUN', text: 'Mock case with Claude as the interviewer, or a recorded peer or voice session' },
+          { agent: 'SCORE', text: 'Scored 1–10 on each dimension of that case type’s rubric, then weighted into one overall' },
+          { agent: null, text: 'My words kept verbatim in the transcript; each step of my answer is marked ok, partial or missed' },
+          { agent: 'TAG', text: 'Recurring errors tagged: dropped constraints, jumped to solution, weak metric, no economics' },
+          { agent: 'PLAN', text: 'The desk shows trend per case type, the pipeline of companies, and what to do right now' },
+        ], paras: [
+          'The desk is a single page with a shared database behind it. It holds a dashboard, a planner that answers “what should I do right now?”, a company pipeline, the rubrics, my frameworks and every logged case. Open any case and you see the transcript, the flow of my answer against a framework, what worked, what to fix, and a separate model answer written independently of my path.' ] },
+        { num: '03', label: 'Decisions', heading: 'The scoring rules matter more than the screens', noVisual: true, paras: [
+          'Each case type has its own weighted rubric. Strategy rewards constraint diagnosis and commitment; GTM rewards the first users to win and launch sequencing; metrics rewards one north star defended under pushback. One generic score would hide all of that.',
+          'Frameworks are menus, not checklists. A clear stop rule earns full credit without reciting every part, because real interviewers reward judgement, not recitation. Building an answer across several turns is not penalised, but asking for help counts as a miss, and a case abandoned partway stays unscored rather than getting a made-up number.',
+          'The trend arrow compares a case type’s average against that average without the latest case, never just the last few. A good or bad day then cannot fake progress.' ] },
+        { num: '04', label: 'Build', heading: 'Data changes are instant; page changes are deliberate', noVisual: true, paras: [
+          'Logging a case or fixing a score writes to the database and shows up live. Changing a framework, a rubric or the layout is a deliberate edit to the page. Keeping the two apart means everyday practice never risks breaking the tool.',
+          'I wrote the product rules and the rubrics; Claude runs the cases, scores them against those rules and does the data entry. The transcript is copied exactly as spoken, never retyped, so a score can always be traced to what I actually said.' ] },
+        { num: '05', label: 'Limits', heading: 'What it can and cannot tell me', noVisual: true, paras: [
+          'The scores are an AI judging against my own rubric. They are consistent, which is what makes trends useful, but they are not validated against what real interviewers would give. I treat the pattern across cases as the signal and any single score as a rough guide.',
+          'It is private and built for one user. The idea that carries over is the loop: a fixed rubric, verbatim evidence, tagged errors and an honest trend, which would work for any skill that is practised, not just case interviews.' ] },
+      ],
+    },
+    {
+      id: 'fcrv',
+      index: '04',
       isExternal: true,
       href: 'FCRV Pre-Reads Automation.dc.html',
       company: 'AI Automation · Built for Myself',
@@ -414,7 +454,7 @@ class Component extends DCLogic {
     },
     {
       id: 'loanbot',
-      index: '04',
+      index: '05',
       isExternal: true,
       href: 'AI Loan Chatbot.dc.html',
       companyLogo: 'assets/logo-isb.png', company: 'FinTech AI · Applied Learning',
@@ -429,7 +469,7 @@ class Component extends DCLogic {
     },
     {
       id: 'zomato',
-      index: '05',
+      index: '06',
       isExternal: true,
       href: 'Zomato Moments.dc.html',
       company: 'Growth Product · Social Commerce',
@@ -463,7 +503,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const blankPx = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-    const projects = this.data.map((p) => ({ ...p, companyLogo: p.companyLogo || blankPx, isInternal: !p.isExternal, noVideo: !p.videoUrl, open: () => this.go(p.id), metricsTop: p.metrics.slice(0, 3) }));
+    const projects = this.data.map((p) => ({ ...p, companyLogo: p.companyLogo || blankPx, isInternal: !p.isExternal, noVideo: !p.videoUrl && !p.noCover, open: () => this.go(p.id), metricsTop: p.metrics.slice(0, 3) }));
     const idx = Math.max(0, projects.findIndex((p) => p.id === this.state.projectId));
     const cur = projects[idx] || projects[0];
     const nextP = projects[(idx + 1) % projects.length];
